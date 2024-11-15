@@ -1,0 +1,6 @@
+venv/
+.ipynb_checkpoints/
+__pycache__/
+models/
+actual_predicted/
+db.sqlite3
