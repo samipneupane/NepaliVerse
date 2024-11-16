@@ -9,7 +9,7 @@ import os
 
 from logic.similarity.main import compare_speech_similarity
 from logic.translation.inference import en_ne_conversion, text_to_speech
-
+from logic.unicode.englishToUnicode import translate_nepali_to_english
 
 class SimilarityAPIView(CreateAPIView):
     serializer_class = SimilaritySerializer
@@ -54,7 +54,7 @@ class TranslationAPIView(CreateAPIView):
             try:
                 nepali_translation = en_ne_conversion(input_text)
                 text_to_speech(nepali_translation)
-                unicode_nepali = "function not implemented"
+                unicode_nepali = translate_nepali_to_english(nepali_translation)
 
                 response_data = {
                     "nepali_translation": nepali_translation,

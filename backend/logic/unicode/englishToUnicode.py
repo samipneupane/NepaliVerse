@@ -77,14 +77,14 @@ def translate_nepali_to_english(word):
     return ''.join(result)
 
 # Get user input
-user_input = input("Enter a Nepali word or sentence: ")
+# user_input = input("Enter a Nepali word or sentence: ")
 
 # Process the user input
-separated = separate_letters(user_input)
-english = translate_nepali_to_english(user_input)
+# separated = separate_letters(user_input)
+# english = translate_nepali_to_english(user_input)
 
 # print("\nNepali Word Analysis:")
 # print("-" * 50)
 # print(f"Original: {user_input}")
 # print(f"Separated: {' + '.join(separated)}")
-print(f"{english}")
+# print(f"{english}")
