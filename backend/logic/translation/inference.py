@@ -9,7 +9,9 @@ from gtts import gTTS
 
 def text_to_speech(nepali_text):
     tts = gTTS(text=nepali_text, lang='ne')
-    tts.save("logic/translation/output/output.wav")
+    if not os.path.exists("media"):
+        os.makedirs("media")
+    tts.save("media/output.wav")
 
 
 def en_ne_conversion(input_text):
@@ -26,10 +28,10 @@ def en_ne_conversion(input_text):
         output = tokenizer.decode(out[0], skip_special_tokens=True)
 
         # translation output in txt file
-        filename = "logic/translation/output/output.txt"
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write(input_text+"\n")
-            f.write(output)
+        # filename = "logic/translation/output/output.txt"
+        # with open(filename, 'w', encoding='utf-8') as f:
+        #     f.write(input_text+"\n")
+        #     f.write(output)
 
         return output
 
