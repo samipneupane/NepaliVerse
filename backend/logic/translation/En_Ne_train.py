@@ -29,7 +29,7 @@ from transformers import AutoTokenizer, TFAutoModelForSeq2SeqLM
 
 
 # model_checkpoint = "Helsinki-NLP/opus-mt-en-hi"
-model_checkpoint = "translation/models/model_0"
+model_checkpoint = "logic/translation/models/model_0"
 
 raw_datasets = load_dataset("momo22/eng2nep")
 
@@ -118,6 +118,6 @@ with tf.device('/GPU:0'):
     model.fit(train_dataset, validation_data=validation_dataset, epochs=1)
 
 
-save_path = "translation/models/model_random"
+save_path = "logic/translation/models/model_random"
 tokenizer.save_pretrained(save_path)
 model.save_pretrained(save_path)
