@@ -8,5 +8,16 @@ sentencepiece
 sacremoses
 evaluate
 sacrebleu
+
 gtts
+pydub
+
+librosa
+noisereduce
+SpeechRecognition
+fuzzywuzzy
+jiwer
+python-Levenshtein
+
 django
+djangorestframework
