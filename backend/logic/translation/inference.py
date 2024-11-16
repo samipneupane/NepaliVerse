@@ -9,12 +9,12 @@ from gtts import gTTS
 
 def text_to_speech(nepali_text):
     tts = gTTS(text=nepali_text, lang='ne')
-    tts.save("translation/output/output.wav")
+    tts.save("logic/translation/output/output.wav")
 
 
 def en_ne_conversion(input_text):
 
-    model_checkpoint = "translation/models/model_1"
+    model_checkpoint = "logic/translation/models/model_1"
 
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
     model = TFAutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
@@ -26,7 +26,7 @@ def en_ne_conversion(input_text):
         output = tokenizer.decode(out[0], skip_special_tokens=True)
 
         # translation output in txt file
-        filename = "translation/output/output.txt"
+        filename = "logic/translation/output/output.txt"
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(input_text+"\n")
             f.write(output)
@@ -35,6 +35,6 @@ def en_ne_conversion(input_text):
 
 
 # usage
-# english_text = "The child screamed. A large yellow dog bounded across the yard."
+# english_text = "Nepal is very beautiful country. I love my country very much. Many tourist come and explore Nepal."
 # nepali_text = en_ne_conversion(english_text)
 # text_to_speech(nepali_text)
