@@ -31,7 +31,7 @@ const HomePage = () => {
         </p>
         <button className="get-started-button" onClick={handleGetStarted}>
           GET STARTED →
-        </button>
+        </button> 
       </div>
       <div className="image-section">
         <img
