@@ -16,7 +16,7 @@ nepali = {
 # Define diacritics for vowel sounds that follow a consonant+halanta sequence
 shabda_banot = {
     'a': '',  # inherent vowel, so we remove halanta
-    'aa': 'ा', 'i': 'ि', 'ii': 'ी', 'u': 'ु', 'uu': 'ू', 'e': 'े', 'ai': 'ै', 'o': 'ो', 'au': 'ौ'
+    'aa': 'ा', 'i': 'ि', 'ii': 'ी', 'u': 'ु', 'uu': 'ू', 'e': 'े', 'ai': 'ै', 'o': 'ो', 'au': 'ौ', 'n':'ँ', 'N':'ं', '.':'।'
 }
 
 def separate_letters(word):
@@ -74,7 +74,7 @@ def translate_nepali_to_english(word):
         
         i += 1
     
-    return ''.join(result)
+    return (''.join(result)).lower()
 
 # Get user input
 # user_input = input("Enter a Nepali word or sentence: ")
