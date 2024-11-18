@@ -8,11 +8,29 @@ from gtts import gTTS
 from pydub import AudioSegment
 
 
+# def text_to_speech(nepali_text):
+#     tts = gTTS(text=nepali_text, lang='ne')
+#     if not os.path.exists("media"):
+#         os.makedirs("media")
+#     tts.save("media/output.wav")
+
+
 def text_to_speech(nepali_text):
     tts = gTTS(text=nepali_text, lang='ne')
     if not os.path.exists("media"):
         os.makedirs("media")
-    tts.save("media/output.wav")
+
+    temp_file = "media/temp_output.mp3"
+    final_file = "media/output.wav"
+
+    tts.save(temp_file)
+
+    audio = AudioSegment.from_file(temp_file, format='mp3')
+    mono_audio = audio.set_channels(1)
+    mono_audio.export(final_file, format="wav")
+
+    #os.remove(temp_file)
+
 
 def en_ne_conversion(input_text):
 
