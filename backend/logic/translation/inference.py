@@ -5,6 +5,7 @@ from transformers import TFAutoModelForSeq2SeqLM
 
 from gtts import gTTS
 
+from pydub import AudioSegment
 
 
 def text_to_speech(nepali_text):
@@ -12,7 +13,6 @@ def text_to_speech(nepali_text):
     if not os.path.exists("media"):
         os.makedirs("media")
     tts.save("media/output.wav")
-
 
 def en_ne_conversion(input_text):
 
