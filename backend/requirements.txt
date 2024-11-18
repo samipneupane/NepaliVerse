@@ -21,3 +21,4 @@ python-Levenshtein
 
 django
 djangorestframework
+django-cors-headers
