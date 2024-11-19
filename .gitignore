@@ -1,9 +1,13 @@
 venv/
 .ipynb_checkpoints/
 __pycache__/
+
 models/
 outputs/
 actual_predicted/
-db.sqlite3
 audiofiles/
-media/
+
+db.sqlite3
+
+output.wav
+temp_output.mp3

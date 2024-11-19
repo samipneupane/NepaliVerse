@@ -51,10 +51,14 @@ class TranslationAPIView(CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             input_text = serializer.validated_data['input_text']
-            
+            audio_synthetic = "output.wav"
             try:
                 nepali_translation = en_ne_conversion(input_text)
-                text_to_speech(nepali_translation)
+                try:
+                    text_to_speech(nepali_translation)
+                except Exception as e:
+                    audio_synthetic = "internet_error.wav" 
+            
                 # unicode_nepali = translate_nepali_to_english(nepali_translation)
                 unicode_nepali = predict_output(nepali_translation)
 
@@ -62,7 +66,7 @@ class TranslationAPIView(CreateAPIView):
                     "nepali_translation": nepali_translation,
                     "unicode_nepali": unicode_nepali,
                     "audio_file": request.build_absolute_uri(
-                        os.path.join(settings.MEDIA_URL, "output.wav")
+                        os.path.join(settings.MEDIA_URL, audio_synthetic)
                     )
                 }
                 return Response(response_data, status=status.HTTP_200_OK)
