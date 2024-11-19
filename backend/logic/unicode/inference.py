@@ -1,6 +1,7 @@
 from keras.models import Model, load_model
 from keras.layers import Input
 import numpy as np
+import re
 
 # Define constants
 num_encoder_tokens = 63
@@ -53,57 +54,47 @@ def decode_sequence(input_seq):
         states_value = [h, c]
     return decoded_sentence
 
-# Predict output function remains the same
-# def predict_output(input_text):
-#     words = input_text.split(' ')
-#     transliterated_words = []
-#     for word in words:
-#         input_seq = np.zeros((1, max_input_len, num_encoder_tokens), dtype='float32')
-#         for t, char in enumerate(word):
-#             input_seq[0, t, input_char_index[char]] = 1
-#         decoded_word = decode_sequence(input_seq)
-#         transliterated_words.append(decoded_word.rstrip('$'))
-#     return ' '.join(transliterated_words)
-
-
 
 
 def predict_output(input_text):
     # Step 1: Split input text into words
-    words = input_text.split(' ')
-    
+    special_characters = [' ',',', '.', ';', ':', "'", '"', '!', '।', '\\', '/', '(', ')', '&', '$', '@', '#', '+', '-', '*', '<', '>', '{', '}', '[', ']', '%', '^', '_', '=']
+    pattern = f"([{'|'.join(re.escape(char) for char in special_characters)}])|([^\s{''.join(re.escape(char) for char in special_characters)}]+)"
+    matches = re.findall(pattern, input_text)
+
+    result_list = []
+    for match in matches:
+        word, special_char = match
+        if word in special_characters:
+            result_list.append(word)
+        if special_char:
+            result_list.append(special_char)
+
     # Step 2: Process each word
     transliterated_words = []
-    for word in words:
-        # Detect and remove special characters
-        replacement = ''
-        if ',' in word:
-            word = word.replace(',', '')
-            replacement = ','
-        elif '।' in word:
-            word = word.replace('।', '')
-            replacement = '.'
-        
-        # Prepare the cleaned word for the model
-        input_seq = np.zeros((1, max_input_len, num_encoder_tokens), dtype='float32')
-        for t, char in enumerate(word):
-            input_seq[0, t, input_char_index.get(char, 0)] = 1  # Use 0 if char is not in input_char_index
-        
-        # Get the transliterated word
-        decoded_word = decode_sequence(input_seq)
-        transliterated_word = decoded_word.rstrip('$')  # Remove end token if present
-        
-        # Add the replacement character back (comma or period)
-        transliterated_words.append(transliterated_word + replacement)
+    for word in result_list:
+
+        if word in special_characters:
+            transliterated_words.append(word)
+
+        else:
+            input_seq = np.zeros((1, max_input_len, num_encoder_tokens), dtype='float32')
+            for t, char in enumerate(word):
+                input_seq[0, t, input_char_index.get(char, 0)] = 1
+            
+            decoded_word = decode_sequence(input_seq)
+            transliterated_word = decoded_word.rstrip('$')
+            
+            transliterated_words.append(transliterated_word)
     
     # Step 3: Recombine words with replacements into a final sentence
-    final_sentence = ' '.join(transliterated_words)
+    final_sentence = ''.join(transliterated_words)
+    final_sentence = final_sentence.replace("।", ".")
     return final_sentence
 
 
 
-
 # Test the prediction
-# text = 'मेरो नाम निका महर्जन हो'
+# text = "!म उनी@हरू%सँग खेल्न मन परा(उँछु): खास!गरी गाउँ<मा;"
 # print('Nepali text:', text)
 # print('Transliterated English text:', predict_output(text))

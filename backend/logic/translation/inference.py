@@ -4,18 +4,11 @@ from transformers import AutoTokenizer
 from transformers import TFAutoModelForSeq2SeqLM
 
 from gtts import gTTS
-
 from pydub import AudioSegment
 
 
-# def text_to_speech(nepali_text):
-#     tts = gTTS(text=nepali_text, lang='ne')
-#     if not os.path.exists("media"):
-#         os.makedirs("media")
-#     tts.save("media/output.wav")
-
-
 def text_to_speech(nepali_text):
+    
     tts = gTTS(text=nepali_text, lang='ne')
     if not os.path.exists("media"):
         os.makedirs("media")
@@ -28,8 +21,6 @@ def text_to_speech(nepali_text):
     audio = AudioSegment.from_file(temp_file, format='mp3')
     mono_audio = audio.set_channels(1)
     mono_audio.export(final_file, format="wav")
-
-    #os.remove(temp_file)
 
 
 def en_ne_conversion(input_text):
@@ -52,6 +43,7 @@ def en_ne_conversion(input_text):
         #     f.write(output)
 
         return output
+
 
 
 # usage
