@@ -19,6 +19,13 @@ const SecondPage = () => {
   const [similarityResult, setSimilarityResult] = useState(null);
 
   const handleConvertToNepali = async () => {
+    // Clear previous results
+  setNepaliTranslation("");
+  setUnicodeNepali("");
+  setAudioFile("");
+  setSimilarityResult(null);
+  setError("");
+  
     setLoading(true);
     try {
       const response = await axios.post("http://127.0.0.1:8000/core/translation/", 
@@ -242,16 +249,20 @@ const SecondPage = () => {
           </>
         )}
 
-        {audioFile && (
-          <>
-            <h3>Audio File:</h3>
-            <a href={audioFile} target="_blank" rel="noreferrer">
-              Listen to Pronunciation
-            </a>
-          </>
-        )}
+ 
+{audioFile && (
+  <>
+    <h3>Audio File:</h3>
+    <audio controls>
+      <source src={audioFile} type="audio/wav" />
+      Your browser does not support the audio element.
+    </audio>
+  </>
+)}
 
-        <p>Want to know how correct your pronunciation is?</p>
+
+{unicodeNepali && (<>
+  <p>Want to know how correct your pronunciation is?</p>
         <button 
           className={`record-button ${isRecording ? 'recording' : ''}`}
           onClick={isRecording ? stopRecording : startRecording}
@@ -259,6 +270,7 @@ const SecondPage = () => {
         >
           {isRecording ? "Stop Recording" : "Click here to record your voice"}
         </button>
+</>)}
 
         {similarityResult && (
           <div className="similarity-results">
