@@ -25,7 +25,7 @@ def text_to_speech(nepali_text):
 
 def en_ne_conversion(input_text):
 
-    model_checkpoint = "logic/translation/models/model_1"
+    model_checkpoint = "logic/translation/models/model_kag3"
 
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
     model = TFAutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)

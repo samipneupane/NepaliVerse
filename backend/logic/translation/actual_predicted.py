@@ -5,16 +5,16 @@ from datasets import load_dataset
 raw_datasets = load_dataset("momo22/eng2nep")
 test_subset = raw_datasets['test']
 
-model_checkpoint = "translation/models/model_0"
+model_checkpoint = "logic/translation/models/model_kag2"
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 model = TFAutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
 
 
-with open("translation/actual_predicted/english.txt", "w", encoding="utf-8") as english_file, \
-     open("translation/actual_predicted/actual.txt", "w", encoding="utf-8") as actual_file, \
-     open("translation/actual_predicted/predicted.txt", "w", encoding="utf-8") as predicted_file:
+with open("logic/translation/actual_predicted/english.txt", "w", encoding="utf-8") as english_file, \
+     open("logic/translation/actual_predicted/actual.txt", "w", encoding="utf-8") as actual_file, \
+     open("logic/translation/actual_predicted/predicted.txt", "w", encoding="utf-8") as predicted_file:
 
-    range_count = range(10, 15) # change the range
+    range_count = range(2000, 4000) # change the range
     start = range_count[0]
     end = range_count[-1]
 

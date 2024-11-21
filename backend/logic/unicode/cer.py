@@ -30,4 +30,4 @@ actual_file = 'logic/unicode/actual_predicted/actual_all.txt'
 predicted_file = 'logic/unicode/actual_predicted/predicted_all.txt'
 
 cer = calculate_cer(actual_file, predicted_file)
-print(f"Character Error Rate (CER): {cer:.4f}")
+print(f"Character Error Rate (CER): {cer:.6f}")
