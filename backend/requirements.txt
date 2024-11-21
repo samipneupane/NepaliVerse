@@ -8,6 +8,7 @@ sentencepiece
 sacremoses
 evaluate
 sacrebleu
+editdistance
 
 gtts
 pydub
