@@ -8,6 +8,3 @@ actual_predicted/
 audiofiles/
 
 db.sqlite3
-
-output.wav
-temp_output.mp3

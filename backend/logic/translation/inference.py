@@ -4,32 +4,26 @@ from transformers import AutoTokenizer
 from transformers import TFAutoModelForSeq2SeqLM
 
 from gtts import gTTS
-from pydub import AudioSegment
+from io import BytesIO
+import base64
+
+
+model_checkpoint = "logic/translation/models/model_kag3"
+tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
+model = TFAutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
 
 
 def text_to_speech(nepali_text):
-    
     tts = gTTS(text=nepali_text, lang='ne')
-    if not os.path.exists("media"):
-        os.makedirs("media")
-
-    temp_file = "media/temp_output.mp3"
-    final_file = "media/output.wav"
-
-    tts.save(temp_file)
-
-    audio = AudioSegment.from_file(temp_file, format='mp3')
-    mono_audio = audio.set_channels(1)
-    mono_audio.export(final_file, format="wav")
+    # tts.save('logic/translation/outputs/output.wav')
+    audio_bytes = BytesIO()
+    tts.write_to_fp(audio_bytes)
+    audio_bytes.seek(0)
+    audio_base64 = base64.b64encode(audio_bytes.read()).decode('utf-8')
+    return audio_base64
 
 
 def en_ne_conversion(input_text):
-
-    model_checkpoint = "logic/translation/models/model_kag3"
-
-    tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-    model = TFAutoModelForSeq2SeqLM.from_pretrained(model_checkpoint)
-
     tokenized = tokenizer([input_text], return_tensors='np')
     out = model.generate(**tokenized, max_length=128)
 
@@ -37,7 +31,7 @@ def en_ne_conversion(input_text):
         output = tokenizer.decode(out[0], skip_special_tokens=True)
 
         # translation output in txt file
-        # filename = "logic/translation/output/output.txt"
+        # filename = "logic/translation/outputs/output.txt"
         # with open(filename, 'w', encoding='utf-8') as f:
         #     f.write(input_text+"\n")
         #     f.write(output)
@@ -45,8 +39,7 @@ def en_ne_conversion(input_text):
         return output
 
 
-
 # usage
-# english_text = "Nepal is very beautiful country. I love my country very much. Many tourist come and explore Nepal."
+# english_text = "Nepal is a beautiful country."
 # nepali_text = en_ne_conversion(english_text)
 # text_to_speech(nepali_text)
