@@ -314,7 +314,7 @@ const SecondPage = () => {
               </>
             )}
             {similarityResult.word_error_rate !== null && (
-              <p>Word Error Rate: {similarityResult.word_error_rate}%</p>
+              <p>Word Error Rate: {similarityResult.word_error_rate.toFixed(2)}</p>
             )}
           </div>
         )}
