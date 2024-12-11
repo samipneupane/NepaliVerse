@@ -38,13 +38,13 @@ decoder_model = Model([decoder_inputs] + decoder_states_inputs, [decoder_outputs
 
 # Decode sequence function remains the same
 def decode_sequence(input_seq):
-    states_value = encoder_model.predict(input_seq)
+    states_value = encoder_model.predict(input_seq, verbose=0)
     target_seq = np.zeros((1, 1, num_decoder_tokens))
     target_seq[0, 0, target_char_index['^']] = 1.0
     stop_condition = False
     decoded_sentence = ''
     while not stop_condition:
-        output_tokens, h, c = decoder_model.predict([target_seq] + states_value)
+        output_tokens, h, c = decoder_model.predict([target_seq] + states_value, verbose=0)
         sampled_token_index = np.argmax(output_tokens[0, -1, :])
         sampled_char = target_chars[sampled_token_index]
         decoded_sentence += sampled_char
@@ -58,7 +58,7 @@ def decode_sequence(input_seq):
 
 
 def predict_output(input_text):
-    print(input_text)
+    # print(input_text)
     # Step 1: Split input text into words
     special_characters = [' ',',', '.', ';', ':', "'", '"', '!', '।', '\\', '/', '(', ')', '&', '$', '@', '#', '+', '-', '*', '<', '>', '{', '}', '[', ']', '%', '^', '_', '=', '?']
     pattern = f"([{'|'.join(re.escape(char) for char in special_characters)}])|([^\s{''.join(re.escape(char) for char in special_characters)}]+)"

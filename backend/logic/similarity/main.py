@@ -28,17 +28,17 @@ def recognize_speech(audio_data):
 
         # Recognize speech using Google's speech recognition
         text = recognizer.recognize_google(audio, language="ne-IN")  # Nepali language
-        print(f"Recognized text: {text}")
+        # print(f"Recognized text: {text}")
         return text
 
     except sr.UnknownValueError:
-        print("Speech Recognition could not understand the audio.")
+        # print("Speech Recognition could not understand the audio.")
         return None
     except sr.RequestError as e:
-        print(f"Could not request results from Google Speech Recognition service; {e}")
+        # print(f"Could not request results from Google Speech Recognition service; {e}")
         return None
     except Exception as e:
-        print(f"An error occurred: {e}")
+        # print(f"An error occurred: {e}")
         return None
 
     

@@ -26,9 +26,7 @@ def text_to_speech(nepali_text):
 def en_ne_conversion(input_text):
     tokenized = tokenizer([input_text], return_tensors='np')
     out = model.generate(**tokenized, max_length=128)
-
-    with tokenizer.as_target_tokenizer():
-        output = tokenizer.decode(out[0], skip_special_tokens=True)
+    output = tokenizer.decode(out[0], skip_special_tokens=True)
 
         # translation output in txt file
         # filename = "logic/translation/outputs/output.txt"
@@ -36,7 +34,7 @@ def en_ne_conversion(input_text):
         #     f.write(input_text+"\n")
         #     f.write(output)
 
-        return output
+    return output
 
 
 # usage
