@@ -47,6 +47,23 @@ The complete training process can be viewed on the following Notebooks:
 
 ---
 
+## Models
+
+You can access the model files through the following links:
+
+1. [Translation Model](https://drive.google.com/drive/u/0/folders/1WA6xnnE-DNnxwCLanGzPug5vpZrLeEBm)
+2. [Transliteration Model](https://drive.google.com/drive/u/0/folders/1_hIsBvYeymVj0EbO_RbDb2n4D_KDC5mA)
+
+### Instructions for Placement
+
+- **Translation Model**  
+  Download the `model_kag3/` folder from the provided link and place it in the project path:  
+  `backend/logic/translation/models/model_kag3/`
+
+- **Transliteration Model**  
+  Download the `model_all.h5` file from the provided link and place it in the project path:  
+  `backend/logic/unicode/models/model_all.h5`
+
 ## Frontend
 
 The frontend is built with **React.js**. It serves as the user interface for interacting with the system.
