@@ -18,14 +18,15 @@ const SecondPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [similarityResult, setSimilarityResult] = useState(null);
 
+
   const handleConvertToNepali = async () => {
     // Clear previous results
-  setNepaliTranslation("");
-  setUnicodeNepali("");
-  setAudioFile("");
-  setSimilarityResult(null);
-  setError("");
-  
+    setNepaliTranslation("");
+    setUnicodeNepali("");
+    setAudioFile(""); // clear previous audio file
+    setSimilarityResult(null);
+    setError("");
+    
     setLoading(true);
     try {
       const response = await axios.post("http://127.0.0.1:8000/core/translation/", 
@@ -39,7 +40,11 @@ const SecondPage = () => {
       );
       setNepaliTranslation(response.data.nepali_translation);
       setUnicodeNepali(response.data.unicode_nepali);
-      setAudioFile(response.data.audio_file);
+      
+      // Convert base64 audio to a Blob
+      const audioBlob = base64ToBlob(response.data.audio_file, 'audio/wav');
+      const audioUrl = URL.createObjectURL(audioBlob);  // create a URL for the audio Blob
+      setAudioFile(audioUrl); // set the audio URL in the state
       setError("");
     } catch (err) {
       const errorMessage = err.response?.data?.error || 
@@ -51,6 +56,27 @@ const SecondPage = () => {
       setLoading(false);
     }
   };
+  
+
+  const base64ToBlob = (base64, type) => {
+    const byteCharacters = atob(base64);  // Decode base64 string to bytes
+    const byteArrays = [];
+  
+    for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+      const slice = byteCharacters.slice(offset, offset + 1024);
+      const byteNumbers = new Array(slice.length);
+  
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+  
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+  
+    return new Blob(byteArrays, { type });
+  };
+  
 
   const convertToMonoWav = async (stereoBlob) => {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -288,7 +314,7 @@ const SecondPage = () => {
               </>
             )}
             {similarityResult.word_error_rate !== null && (
-              <p>Word Error Rate: {similarityResult.word_error_rate}%</p>
+              <p>Word Error Rate: {similarityResult.word_error_rate.toFixed(2)}</p>
             )}
           </div>
         )}

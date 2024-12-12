@@ -1,44 +1,46 @@
 import librosa
 import noisereduce as nr
 import speech_recognition as sr
-import librosa.display
 import re
 from fuzzywuzzy import fuzz
 from jiwer import wer
 import difflib
+from io import BytesIO
+from pydub import AudioSegment
 
 
-def reduce_noise(audio_path, noise_duration=0.5, noise_reduction_method="noisereduce"):
-    audio, sr = librosa.load(audio_path, sr=None)
-
-    if noise_reduction_method == "noisereduce":
-        noise_sample = audio[:int(noise_duration * sr)]
-        reduced_noise_audio = nr.reduce_noise(y=audio, sr=sr, y_noise=noise_sample)
-
-    else:
-        reduced_noise_audio = audio
-
-    # Normalize intensity
-    reduced_noise_audio = librosa.util.normalize(reduced_noise_audio)
-
-    return reduced_noise_audio, sr
+recognizer = sr.Recognizer()
 
 
-def recognize_speech(audio_path):
-
-    recognizer = sr.Recognizer()
-    with sr.AudioFile(audio_path) as source:
-        audio = recognizer.record(source)
-
+def recognize_speech(audio_data):
     try:
+        # Convert the audio to PCM WAV in-memory
+        audio_segment = AudioSegment.from_file(audio_data)
+        audio_segment = audio_segment.set_frame_rate(16000).set_channels(1) 
+        wav_io = BytesIO()
+        audio_segment.export(wav_io, format="wav")
+        wav_io.seek(0)
+
+        # Use BytesIO object as the audio source
+        with sr.AudioFile(wav_io) as source:
+            recognizer.adjust_for_ambient_noise(source)
+            audio = recognizer.record(source)
+
+        # Recognize speech using Google's speech recognition
         text = recognizer.recognize_google(audio, language="ne-IN")  # Nepali language
+        # print(f"Recognized text: {text}")
         return text
+
     except sr.UnknownValueError:
-        print("Speech Recognition could not understand the audio.")
+        # print("Speech Recognition could not understand the audio.")
         return None
     except sr.RequestError as e:
-        print(f"Could not request results from Google Speech Recognition service; {e}")
+        # print(f"Could not request results from Google Speech Recognition service; {e}")
         return None
+    except Exception as e:
+        # print(f"An error occurred: {e}")
+        return None
+
     
 
 def preprocess_text(text):
@@ -50,21 +52,10 @@ def preprocess_text(text):
     return text.strip()
 
 
-def compare_speech_similarity(user_audio_path, reference_transcription):
-    
-    user_audio, sr_user = reduce_noise(user_audio_path)
-
-    # Resample audio to 16000 Hz
-    user_audio = librosa.resample(user_audio, orig_sr=sr_user, target_sr=16000)
-
-    # Update sample rates after resampling
-    sr_user = 16000
-
-    # Trim Silence
-    user_audio, _ = librosa.effects.trim(user_audio, top_db=20)
+def compare_speech_similarity(audio_data, reference_transcription):
 
     # Get the transcription of user and reference audio using Speech Recognition
-    user_transcription = recognize_speech(user_audio_path)
+    user_transcription = recognize_speech(audio_data)
 
     # Preprocess transcriptions
     user_transcription = preprocess_text(user_transcription)
@@ -72,6 +63,7 @@ def compare_speech_similarity(user_audio_path, reference_transcription):
 
     # Calculate fuzzy similarity score
     similarity_score = fuzz.ratio(user_transcription, reference_transcription)
+
 
     error = None
     if similarity_score >= 90:
